@@ -11,7 +11,10 @@
           <router-link class="nav-link" :to="{ path: '/static' }">樣板頁面</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" :to="{ path: '/chatroom' }">聊天室</router-link>
+          <router-link class="nav-link" :to="{ path: '/chatroom' }">disconnect聊天室</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" :to="{ path: '/firechatroom' }">聊天室</router-link>
         </li>
       </ul>
     </div>
