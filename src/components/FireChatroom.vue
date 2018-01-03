@@ -46,7 +46,9 @@
 </template>
 
 <script>
+// connect to firebase's chatroom
 var chatroomRef = firebase.database().ref('/chatroom/')
+
 export default {  
   name: 'hello',
   data() {
@@ -54,17 +56,23 @@ export default {
       tempUsername: '',
       tempMessage: '',
       username: '',
+      messagesLength: '',
       messages: [
-        {
-          username: 'Casper2',
-          message: 'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.'
-        },
-        {
-          username: 'Pon Pon',
-          message: 'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.'
-        }
+        // {
+        //   username: 'Casper2',
+        //   message: 'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.'
+        // },
+        // {
+        //   username: 'Pon Pon',
+        //   message: 'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.'
+        // }
       ]
     }
+  },  
+  computed: {
+    timestamp: function () {
+      return Math.floor(Date.now() / 1000)
+    },
   },
   methods: {
     updateUsername () {
@@ -74,22 +82,43 @@ export default {
     },
     submitMessage () {
       let vm = this;
-      vm.messages.push({
+      // vm.messages.unshift({
+      //   username: vm.username,
+      //   message: vm.tempMessage
+      // });      
+
+      // update data to firebase
+      chatroomRef.child(this.timestamp).set({
+        timestamp: vm.timestamp,
         username: vm.username,
         message: vm.tempMessage
       });
-      vm.tempMessage = ''
-    }
+    },
+    filterTimeStamp(value) {
+      return value == vm.timestamp;
+    },
+    ObjectLength( object ) {
+      var length = 0;
+      for( var key in object ) {
+        if( object.hasOwnProperty(key) ) {
+          ++length;
+        }
+      }
+      return length;
+    },
   },
   mounted() {
-    let vm = this;
-    let messages = [];    
+    let vm = this    
+    let messages = []
     chatroomRef.on('value', function(snapshot) {
-      var val = snapshot.val();
-      console.log(val);
-      vm.messages = val;
-      // do something
-    });
+      snapshot.forEach(function(chatVal) {
+        // console.log(chatVal.val())
+        messages.unshift(chatVal.val())
+      });
+      // console.log('on-messagesLength')
+      // console.log(vm.messagesLength)
+      vm.messages = messages.slice(0,vm.ObjectLength(snapshot.val()))
+    });  
   }
 }
 </script>
