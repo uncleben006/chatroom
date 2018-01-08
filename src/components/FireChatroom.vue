@@ -2,7 +2,23 @@
   <div class="chatroom mt-3">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-9">
+        <div class="col-lg-3">
+          <div class="card">
+            <div class="card-header">
+              你的資料
+            </div>
+            <div class="card-block">
+              <div class="form-group">
+                <label v-if=" username=='' " for="username">姓名</label>
+                <label v-if=" username!='' " for="username">你的姓名: {{username}}</label>
+                <input type="text" class="form-control" v-model="tempUsername" id="username" placeholder="輸入姓名">
+                <small class="form-text text-muted">請輸入個人姓名開始使用聊天室</small>
+              </div>
+              <button type="button" class="btn btn-primary" @click="updateUsername()">送出</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-9 mt-lg-0 mt-md-3">
           <div class="card card-outline-primary">
             <div class="card-block">
               <div class="input-group">
@@ -12,7 +28,7 @@
                 </span>
               </div>
               <ul class="list-unstyled row">
-                <li class="media mt-3 col-9" v-for="(item, key) in messages" :class="{ 'text-success offset-3': item.username == username }">
+                <li class="media mt-3 col-12" v-for="(item, key) in messages" :class="{ 'text-success text-right': item.username == username }">
                   <img class="d-flex mr-3" width="50" height="50" src="http://lorempixel.com/50/50/sports" alt="" v-if="item.username != username">
                   <div class="media-body">
                     <h5 class="mt-0 mb-1">{{ item.username }}</h5>
@@ -23,22 +39,7 @@
               </ul>
             </div>
           </div>
-        </div>
-        <div class="col-3">
-          <div class="card">
-            <div class="card-header">
-              你的資料
-            </div>
-            <div class="card-block">
-              <div class="form-group">
-                <label for="username">姓名</label>
-                <input type="text" class="form-control" v-model="tempUsername" id="username" placeholder="輸入姓名">
-                <small class="form-text text-muted">請輸入個人姓名開始使用聊天室</small>
-              </div>
-              <button type="button" class="btn btn-primary" @click="updateUsername()">送出</button>
-            </div>
-          </div>
-        </div>
+        </div>        
       </div>
     </div>
   
@@ -68,11 +69,6 @@ export default {
         // }
       ]
     }
-  },  
-  computed: {
-    timestamp: function () {
-      return Math.floor(Date.now() / 1000)
-    },
   },
   methods: {
     updateUsername () {
@@ -82,17 +78,20 @@ export default {
     },
     submitMessage () {
       let vm = this;
+      let timestamp = Math.floor(Date.now() / 1000);
       // vm.messages.unshift({
       //   username: vm.username,
       //   message: vm.tempMessage
       // });      
 
       // update data to firebase
-      chatroomRef.child(this.timestamp).set({
-        timestamp: vm.timestamp,
+      chatroomRef.child(timestamp).set({
+        timestamp: timestamp,
         username: vm.username,
         message: vm.tempMessage
       });
+      // clear message
+      vm.tempMessage = ''
     },
     filterTimeStamp(value) {
       return value == vm.timestamp;
@@ -125,5 +124,24 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
+@media (max-width: 992px) {
+  .card-header {
+    font-size: 2.5rem;
+  }
+  label {
+    font-size: 2rem;
+  }
+  .form-control {
+    padding: 1rem;
+  }
+  .btn {
+    padding: 1rem 1.75rem;
+  }
+  h5 {
+    font-size: 2rem;
+  }
+  p {
+    font-size: 1.5rem;
+  }
+}
 </style>
