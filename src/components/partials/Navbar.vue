@@ -39,7 +39,11 @@ export default {
   data() {
     return {
       data: '',
+<<<<<<< HEAD
       navValue: false,
+=======
+      navValue: false
+>>>>>>> f13be4ce5e0c4fcafc202058fe671d62a44ba994
     }
   },
   mounted() {
@@ -98,9 +102,15 @@ export default {
     height: 50px;
   }
 }
+<<<<<<< HEAD
 
 
 
+=======
+
+
+
+>>>>>>> f13be4ce5e0c4fcafc202058fe671d62a44ba994
 /* div.dropdown.closed ul {
   margin-top: 0px;
 }

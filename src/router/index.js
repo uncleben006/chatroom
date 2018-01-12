@@ -4,6 +4,8 @@ import Hello from '@/components/Hello'
 import Static from '@/components/Static'
 import Chatroom from '@/components/Chatroom'
 import FireChatroom from '@/components/FireChatroom'
+import boardGame from '@/components/boardGame'
+
 
 
 Vue.use(Router)
@@ -30,5 +32,10 @@ export default new Router({
       name: 'FireChatroom',
       component: FireChatroom
     },
+    {
+      path: '/board-game',
+      name: 'boardGame',
+      component: boardGame
+    }
   ]
 })
