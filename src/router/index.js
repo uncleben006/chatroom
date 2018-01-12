@@ -5,12 +5,13 @@ import Static from '@/components/Static'
 import Chatroom from '@/components/Chatroom'
 import FireChatroom from '@/components/FireChatroom'
 
+
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/hello',
+      path: '/index',
       name: 'Hello',
       component: Hello
     },
