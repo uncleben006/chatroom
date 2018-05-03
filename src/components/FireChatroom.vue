@@ -2,26 +2,6 @@
   <div class="chatroom mt-3">
     <div class="container-fluid">
       <div class="row">
-<<<<<<< HEAD
-        <div class="col-lg-3 card-m-order">
-          <div class="card">
-            <div v-if=" username==''" class="card-header">你的資料</div>
-            <div v-if=" username!=''" class="card-header">你的姓名: {{username}} <button type="button" class="btn btn-primary float-right" @click="username = ''">更改姓名</button></div>
-            <div style="overflow: hidden">
-              <div class="card-block" :class="{ 'card-closed': username!='' }">
-                <div class="form-group">
-                  <label for="username">姓名</label>
-                  <input type="text" class="form-control" v-model="tempUsername" id="username" placeholder="輸入姓名">
-                  <small class="form-text text-muted">請輸入個人姓名開始使用聊天室</small>
-                </div>
-                <button type="button" class="btn btn-primary" @click="updateUsername()">送出</button>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-        <div class="col-lg-9 mt-lg-0 mt-md-3" style="position: relative">
-=======
         <div class="col-lg-3">
           <div class="card">
             <div class="card-header">
@@ -39,7 +19,6 @@
           </div>
         </div>
         <div class="col-lg-9 mt-lg-0 mt-md-3">
->>>>>>> f13be4ce5e0c4fcafc202058fe671d62a44ba994
           <div class="card card-outline-primary">
             <div class="card-block">              
               <div class="input-group">
@@ -48,11 +27,7 @@
                   <button class="btn btn-primary" type="button" :disabled="!username.length" @click="submitMessage()">送出</button>
                 </span>
               </div>
-<<<<<<< HEAD
-              <ul class="list-unstyled row pt-3" id="message-list">
-=======
               <ul class="list-unstyled row">
->>>>>>> f13be4ce5e0c4fcafc202058fe671d62a44ba994
                 <li class="media mt-3 col-12" v-for="(item, key) in messages" :class="{ 'text-success text-right': item.username == username }">
                   <img class="d-flex mr-3" width="50" height="50" src="http://lorempixel.com/50/50/sports" alt="" v-if="item.username != username">
                   <div class="media-body">
