@@ -2,32 +2,10 @@
   <div class="chatroom mt-3">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-lg-3">
-          <div class="card">
-            <div class="card-header">
-              你的資料
-            </div>
-            <div class="card-block">
-              <div class="form-group">
-                <label v-if=" username=='' " for="username">姓名</label>
-                <label v-if=" username!='' " for="username">你的姓名: {{username}}</label>
-                <input type="text" class="form-control" v-model="tempUsername" id="username" placeholder="輸入姓名">
-                <small class="form-text text-muted">請輸入個人姓名開始使用聊天室</small>
-              </div>
-              <button type="button" class="btn btn-primary" @click="updateUsername()">送出</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-9 mt-lg-0 mt-md-3">
-          <div class="card card-outline-primary">
-            <div class="card-block">              
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="輸入對話內容" @keyup.enter="submitMessage" v-model="tempMessage" :disabled="!username.length">
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" type="button" :disabled="!username.length" @click="submitMessage()">送出</button>
-                </span>
-              </div>
-              <ul class="list-unstyled row">
+        <div class="col-lg-6 mx-auto chatroom-height">
+          <div class="card" style="height: 100%;">
+            <div id="message-list" class="card-body" style="height: 0%; overflow: auto;">    
+              <ul class="list-unstyled row flex-column-reverse">
                 <li class="media mt-3 col-12" v-for="(item, key) in messages" :class="{ 'text-success text-right': item.username == username }">
                   <img class="d-flex mr-3" width="50" height="50" src="http://lorempixel.com/50/50/sports" alt="" v-if="item.username != username">
                   <div class="media-body">
@@ -37,12 +15,32 @@
                   <img class="d-flex ml-3" width="50" height="50" src="http://lorempixel.com/50/50/sports" alt="" v-if="item.username == username">
                 </li>
               </ul>
+              <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
             </div>
-          </div>
-        </div>        
+            <div class="card" style="position: sticky; bottom: 0">
+              <div class="card-header bg-dark text-light" data-toggle="collapse" data-target="#name">
+                <span v-if=" username=='' " for="username">輸入資料: </span>
+                <span v-if=" username!='' " for="username">你的姓名: {{username}}</span>                
+              </div>
+              <div id="name" class="card-body collapse show">
+                <div class="form-group">
+                  <label for="username">姓名</label>           
+                  <input type="text" class="form-control" v-model="tempUsername" id="username" placeholder="輸入姓名">
+                  <small class="form-text text-muted">請輸入個人姓名開始使用聊天室</small>                  
+                </div>
+                <button type="button" data-toggle="collapse" data-target="#name" class="btn btn-warning" @click="updateUsername()">送出</button>
+              </div>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="輸入對話內容" @keyup.enter="submitMessage" v-model="tempMessage" :disabled="!username.length">
+                <span class="input-group-btn">
+                  <button class="btn btn-warning" type="button" :disabled="!username.length" @click="submitMessage()">送出</button>
+                </span>
+              </div>
+            </div>                    
+          </div>            
+        </div>
       </div>
-    </div>
-  
+    </div>  
   </div>
 </template>
 
@@ -58,16 +56,7 @@ export default {
       tempMessage: '',
       username: '',
       messagesLength: '',
-      messages: [
-        // {
-        //   username: 'Casper2',
-        //   message: 'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.'
-        // },
-        // {
-        //   username: 'Pon Pon',
-        //   message: 'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.'
-        // }
-      ]
+      messages: []
     }
   },
   methods: {
@@ -79,10 +68,6 @@ export default {
     submitMessage () {
       let vm = this;
       let timestamp = Math.floor(Date.now() / 1000);
-      // vm.messages.unshift({
-      //   username: vm.username,
-      //   message: vm.tempMessage
-      // });      
 
       // update data to firebase
       chatroomRef.child(timestamp).set({
@@ -93,7 +78,7 @@ export default {
       // clear message
       vm.tempMessage = ''
       // scroll to bottom of message block
-      setTimeout(() => { vm.scrollToBottom() }, 500)
+      setTimeout(() => { vm.scrollToBottom() }, 50)
     },
     filterTimeStamp(value) {
       return value == vm.timestamp;
@@ -120,7 +105,7 @@ export default {
   },
   mounted() {
     let vm = this    
-    setTimeout(() => { vm.scrollToBottom() }, 1000)
+    // setTimeout(() => { vm.scrollToBottom() }, 1000)
     let messages = []    
     // get window width
     var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth    
@@ -137,62 +122,15 @@ export default {
       else{ 
         vm.messages = snapshot.val()  
       }            
-    });  
-
-    
+    });     
+    $('.arrow-down i').on('click',function () {
+      vm.scrollToBottom()
+    })
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-@media (max-width: 992px) {
-  .chatroom {
-    position: absolute;
-    bottom: 5vh;
-  }
-  .card-m-order {
-    order: 2;
-  }
-  .name-closed {
-    opacity: 0;
-  }
-  .card-header {
-    font-size: 2.5rem;
-  }
-  .card-block {
-    transition: 0.5s;
-  }
-  #message-list {
-    height: 80vh;
-    overflow: auto;
-  }
-  .card-closed {
-    margin-bottom: -100%;
-  }
-  label {
-    font-size: 2rem;
-  }
-  .form-control {
-    padding: 1rem;
-    font-size: 1.5rem;
-  }
-  .input-group {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: cornflowerblue;
-    z-index: 2;
-  }
-  .btn {
-    padding: 1rem 1.75rem;
-  }
-  h5 {
-    font-size: 2rem;
-  }
-  p {
-    font-size: 1.5rem;
-  }
-}
+
 </style>

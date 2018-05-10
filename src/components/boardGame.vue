@@ -3,19 +3,22 @@
     <div class="center-column">
       <h1>全台桌遊店家</h1>
       <h3>資料來源 - 新天鵝堡與桌末狂歡</h3>
-      <div class="pagination">
-        <ul>
-          <li :class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1); reOrder()">
-            <a href="#">Prev</a>
+
+      <nav>
+        <ul class="pagination justify-content-center">
+          <li class="page-item" :class="{'disabled ': (currPage === 1)}" @click.prevent="setPage(currPage-1); reOrder()">
+            <a class="page-link" href="#">Prev</a>
           </li>
-          <li :class="{'active': (currPage === (n))}" @click.prevent="setPage(n); reOrder()" v-for="n in totalPage">
-            <a href="#">{{n}}</a>
+          <li class="page-item" :class="{'active': (currPage === (n))}" @click.prevent="setPage(n); reOrder()" v-for="n in totalPage">
+            <a class="page-link" href="#">{{n}}</a>
           </li>
-          <li :class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1); reOrder()">
-            <a href="#">Next</a>
+          <li class="page-item" :class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1); reOrder()">
+            <a class="page-link" href="#">Next</a>
           </li>
         </ul>
-      </div>
+      </nav>
+
+
       <div class="search">搜尋：
         <input type="text" v-model="filter_name" style="margin:0;" />
         <button @click="filter_name = ''; reOrder()">清除</button>
@@ -3962,6 +3965,9 @@ export default {
     // started
     setTimeout(function(){ vm.grid.masonry('reloadItems'); }, 50); 
     setTimeout(function(){ vm.grid.masonry(); }, 50); 
+    // started
+    setTimeout(function(){ vm.grid.masonry('reloadItems'); }, 1000); 
+    setTimeout(function(){ vm.grid.masonry(); }, 1000); 
 
     // for searching 
     $( ".search" ).keydown(function(e) {  
@@ -4220,155 +4226,4 @@ html, body {
   padding: 5px;
   border: solid 1px #780116;
 }
-
-/* bootstrap pagination start */
-
-  .pagination {
-    margin: 20px 0;
-    justify-content: center;
-  }
-
-  .pagination ul {
-    display: inline-block;
-    *display: inline;
-    *zoom: 1;
-    margin-left: 0;
-    margin-bottom: 0;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .pagination ul>li {
-    display: inline;
-  }
-
-  .pagination ul>li>a,
-  .pagination ul>li>span {
-    float: left;
-    padding: 4px 12px;
-    line-height: 20px;
-    text-decoration: none;
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
-    border-left-width: 0;
-  }
-
-  .pagination ul>li>a:hover,
-  .pagination ul>li>a:focus,
-  .pagination ul>.active>a,
-  .pagination ul>.active>span {
-    background-color: #f5f5f5;
-  }
-
-  .pagination ul>.active>a,
-  .pagination ul>.active>span {
-    color: #999999;
-    cursor: default;
-  }
-
-  .pagination ul>.disabled>span,
-  .pagination ul>.disabled>a,
-  .pagination ul>.disabled>a:hover,
-  .pagination ul>.disabled>a:focus {
-    color: #999999;
-    background-color: transparent;
-    cursor: default;
-  }
-
-  .pagination ul>li:first-child>a,
-  .pagination ul>li:first-child>span {
-    border-left-width: 1px;
-    -webkit-border-top-left-radius: 4px;
-    -moz-border-radius-topleft: 4px;
-    border-top-left-radius: 4px;
-    -webkit-border-bottom-left-radius: 4px;
-    -moz-border-radius-bottomleft: 4px;
-    border-bottom-left-radius: 4px;
-  }
-
-  .pagination ul>li:last-child>a,
-  .pagination ul>li:last-child>span {
-    -webkit-border-top-right-radius: 4px;
-    -moz-border-radius-topright: 4px;
-    border-top-right-radius: 4px;
-    -webkit-border-bottom-right-radius: 4px;
-    -moz-border-radius-bottomright: 4px;
-    border-bottom-right-radius: 4px;
-  }
-
-  .pagination-centered {
-    text-align: center;
-  }
-
-  .pagination-right {
-    text-align: right;
-  }
-
-  .pagination-large ul>li>a,
-  .pagination-large ul>li>span {
-    padding: 11px 19px;
-    font-size: 17.5px;
-  }
-
-  .pagination-large ul>li:first-child>a,
-  .pagination-large ul>li:first-child>span {
-    -webkit-border-top-left-radius: 6px;
-    -moz-border-radius-topleft: 6px;
-    border-top-left-radius: 6px;
-    -webkit-border-bottom-left-radius: 6px;
-    -moz-border-radius-bottomleft: 6px;
-    border-bottom-left-radius: 6px;
-  }
-
-  .pagination-large ul>li:last-child>a,
-  .pagination-large ul>li:last-child>span {
-    -webkit-border-top-right-radius: 6px;
-    -moz-border-radius-topright: 6px;
-    border-top-right-radius: 6px;
-    -webkit-border-bottom-right-radius: 6px;
-    -moz-border-radius-bottomright: 6px;
-    border-bottom-right-radius: 6px;
-  }
-
-  .pagination-mini ul>li:first-child>a,
-  .pagination-small ul>li:first-child>a,
-  .pagination-mini ul>li:first-child>span,
-  .pagination-small ul>li:first-child>span {
-    -webkit-border-top-left-radius: 3px;
-    -moz-border-radius-topleft: 3px;
-    border-top-left-radius: 3px;
-    -webkit-border-bottom-left-radius: 3px;
-    -moz-border-radius-bottomleft: 3px;
-    border-bottom-left-radius: 3px;
-  }
-
-  .pagination-mini ul>li:last-child>a,
-  .pagination-small ul>li:last-child>a,
-  .pagination-mini ul>li:last-child>span,
-  .pagination-small ul>li:last-child>span {
-    -webkit-border-top-right-radius: 3px;
-    -moz-border-radius-topright: 3px;
-    border-top-right-radius: 3px;
-    -webkit-border-bottom-right-radius: 3px;
-    -moz-border-radius-bottomright: 3px;
-    border-bottom-right-radius: 3px;
-  }
-
-  .pagination-small ul>li>a,
-  .pagination-small ul>li>span {
-    padding: 2px 10px;
-    font-size: 11.9px;
-  }
-
-  .pagination-mini ul>li>a,
-  .pagination-mini ul>li>span {
-    padding: 0 6px;
-    font-size: 10.5px;
-  }
-  
-/* bootstrap pagination end */
 </style>

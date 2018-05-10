@@ -17,11 +17,9 @@ export default {
 </script>
 
 <style lang="scss">
-$border-width: 2px;
-$card-border-width: 2px;
-@import "~bootstrap/scss/bootstrap";
+// @import 'bootstrap/'
+@import './stylesheets/all';
+// @import '~bootstrap/scss/bootstrap';
+// @import './stylesheets/all';
 
-.router-link-active {
-  color: $brand-primary !important;
-}
 </style>

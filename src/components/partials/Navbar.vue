@@ -1,82 +1,45 @@
 <template>
-  <nav class="navbar navbar-toggleable-md navbar-light bg-faded sticky-top">
-    <a class="navbar-brand" href="#">Navbar
-      <button class="navbar-toggler" type="button" @click=" navValue = navValue ? false : true ">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </a>  
-    <div class="navbar-collapse" :class="{ open : navValue }" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item" @click="navValue = false">
-          <router-link class="nav-link" :to="{ path: '/index' }" >入口頁面</router-link>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="mobile-nav" >
+      <div class="navbar-nav">
+        <li class="nav-item" data-url="/">
+          <router-link class="nav-link" :to="{ path: '/' }">聊天室</router-link>
         </li>
-        <li class="nav-item" @click="navValue = false">
-          <router-link class="nav-link" :to="{ path: '/firechatroom' }" >聊天室</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" :to="{ path: '/board-game' }" @click="navValue = false">桌遊店家</router-link>
-        </li>
-      </ul>
+        <li class="nav-item" data-url="/board-game">
+          <router-link class="nav-link" :to="{ path: '/board-game' }">桌遊店家</router-link>
+        </li>   
+      </div>
     </div>
-  </nav>  
+  </nav>
+  
 </template>
-
 <script>
 export default {
-  name: 'navbar',
+  name: "navbar",
   data() {
     return {
-      data: '',
-      navValue: false,
-    }
+      data: "",
+    };
   },
   mounted() {
-    var vm = this
-    setInterval(console.log(vm.navValue),1000)
+    var vm = this;
+    // 偵測 url pathname，refresh 才不會吃到原本的 class
+    var pathname = $(location).attr('pathname');
+    if(pathname == '/'){
+      $('[data-url="/"]').toggleClass('active')
+    }
+    else if(pathname == '/board-game'){
+      $('[data-url="/board-game"]').toggleClass('active')
+    }
+    // 這樣換按鍵才能更換 navbar class
+    $('.nav-item').on('click',function () {
+      $('.nav-item').removeClass('active')
+      $(this).toggleClass('active')
+    });    
   }
-}
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.navbar-toggler{
-  float: right;
-}
-.navbar-collapse.open ul li {
-  margin-top: 0px;
-  height: 40px;
-}
-@media (max-width: 992px) {
-  .navbar-collapse ul {
-    overflow: hidden; 
-    -moz-transition: margin-top 1s;
-    -o-transition: margin-top 1s;
-    -webkit-transition: margin-top 1s;
-    transition: margin-top 1s;   
-  }
-  .navbar-collapse ul li {
-    margin-top: -40px;
-    height: 0px;
-    vertical-align: top;
-    overflow: hidden;
-    cursor: pointer;    
-    -moz-transition: margin-top 0.5s, height 0.5s;
-    -o-transition: margin-top 0.5s, height 0.5s;
-    -webkit-transition: margin-top 0.5s, height 0.5s;
-    transition: margin-top 0.5s, height 0.5s;
-  }
-  .navbar-brand {
-    font-size: 2rem
-  }
-  .navbar-toggler {
-    padding: 0.5rem 1rem
-  }
-  .nav-link {
-    font-size: 1.5rem
-  }
-  .navbar-collapse.open ul li {
-    margin-top: 0px;
-    height: 50px;
-  }
-}
-</style>
