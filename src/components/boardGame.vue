@@ -9,7 +9,10 @@
           <li class="page-item" :class="{'disabled ': (currPage === 1)}" @click.prevent="setPage(currPage-1); reOrder()">
             <a class="page-link" href="#">Prev</a>
           </li>
-          <li class="page-item" :class="{'active': (currPage === (n))}" @click.prevent="setPage(n); reOrder()" v-for="n in totalPage">
+          <li class="page-item" 
+              v-bind:class="{'active': (currPage === (n))}"               
+              @click.prevent="setPage(n); reOrder()"               
+              v-for="(key,n) in totalPage">
             <a class="page-link" href="#">{{n}}</a>
           </li>
           <li class="page-item" :class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1); reOrder()">

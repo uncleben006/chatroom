@@ -10,9 +10,11 @@ body {
 .nav-link {
   display: inline-block;
 }
-.active a{
+
+.navbar-nav .active a{
   border-bottom: solid 0.25em orange 
 }
+
 .form-group {
   position: relative;
 }
