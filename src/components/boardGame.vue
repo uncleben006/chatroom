@@ -1,11 +1,11 @@
 <template>
   <div id="store" class="mt-3">
-    <div class="center-column">
+    <div class="container text-center">
       <h1>全台桌遊店家</h1>
       <h3>資料來源 - 新天鵝堡與桌末狂歡</h3>
       <nav>
-        <ul class="pagination justify-content-center">
-          <li class="page-item" :class="{'disabled ': (currPage === 1)}" @click.prevent="setPage(currPage-1); reOrder()">
+        <ul class="pagination justify-content-center flex-wrap">
+          <li class="page-item d-none d-md-block" :class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1); reOrder()">
             <a class="page-link" href="#">Prev</a>
           </li>
           <li class="page-item" 
@@ -14,13 +14,13 @@
               v-for="n in totalPage">
             <a class="page-link" href="#">{{n}}</a>
           </li>
-          <li class="page-item" :class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1); reOrder()">
+          <li class="page-item d-none d-md-block" :class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1); reOrder()">
             <a class="page-link" href="#">Next</a>
           </li>
         </ul>
       </nav>
       <div class="search">搜尋：
-        <input type="text" v-model="filter_name" style="margin:0;" />
+        <input type="text" v-model="filter_name">
         <button @click="filter_name = ''; reOrder()">清除</button>
       </div>
       <div class="search">店家類型：
@@ -37,14 +37,13 @@
         <button @click="filter_name = '高雄'; reOrder(); currPage=1;">高雄</button>
       </div>
     </div>
-    <div class="store-column">
+    <div class="container">
       <div class="inner-column">
         <div class="store" v-for="(data,id) in filteredRows.slice(pageStart,pageStart+countOfPage)">
-          <!-- <div class="box" @click="showInfo(id)"> -->
-          <div class="box" data-toggle="modal" data-target="#store-info" @click="showInfo(id)">
+          <div class="box" data-toggle="modal" data-target="#store-info" @click="getNo(data.no)">
             <div class="title">{{data.storeName}}</div>
             <hr/>
-            <img class="image" :src="'./static/image/' + data.storePhoto " alt=""></img>
+            <img class="img-fluid w-100" :src="'./static/image/' + data.storePhoto " alt=""></img>
             <div class="address">地址：{{data.storeAddress}}</div>
             <hr/>
             <div class="info">類型：{{data.storeType}}</div>
@@ -52,31 +51,39 @@
         </div>
       </div>
     </div>
-
-<!-- Modal 
-<div class="modal fade" id="store-info">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{stores[2].data[stores_id].storeName}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+    <div class="modal fade" id="store-info">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-warning-light">
+            <h5 class="modal-title">{{filterStore[0].storeName}}</h5>
+            <button type="button" class="close" data-dismiss="modal" >
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-5">
+                <img :src="'./static/image/'+filterStore[0].storePhoto " alt="" class="img-fluid w-100">
+                <div class="my-1">
+                  類型：{{filterStore[0].storeType}}
+                  <br>地址：{{filterStore[0].storeAddress}}
+                  <br>電話：{{filterStore[0].storeNumber}}
+                  <br>營業時間：<span v-html="filterStore[0].storeTime" ></span>
+                  <br>消費模式：<span v-html="filterStore[0].storeSpend" ></span>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <iframe :src="filterStore[0].googleURL" class="w-100 h-100"></iframe>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>-->
-
-
-
-    <div class="store-outclick" v-if="outclick_show" @click="closeInfo"></div>
+    <!-- <div class="store-outclick" v-if="outclick_show" @click="closeInfo"></div>
     <div class="store-info">
       <div class="center-column">        
         <div class="info-column">
@@ -115,7 +122,7 @@
           
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   
 </template>
@@ -141,16 +148,25 @@ export default {
       // 所以這裡將 filter_name 與 stores[n].name 通通轉小寫方便比對。
       var filter_name = this.filter_name.toLowerCase();
 
-      // 如果 filter_name 有內容，回傳過濾後的資料，否則將原本的 stores 回傳。
+      // 如果 filter_name(移除空白後) 有內容，回傳過濾後的資料，否則將原本的 stores 回傳。
       return ( this.filter_name.trim() !== '' )?
-        this.stores[2].data.filter(function(d){ return d.storeName.toLowerCase().indexOf(filter_name) > -1 
-                                                || d.storeType.toLowerCase().indexOf(filter_name) > -1
-                                                || d.storeAddress.toLowerCase().indexOf(filter_name) > -1
-                                                || d.storePlace.toLowerCase().indexOf(filter_name) > -1
-                                                || d.storeArea.toLowerCase().indexOf(filter_name) > -1
-                                                || d.storeNumber.toLowerCase().indexOf(filter_name) > -1})
+        this.stores[2].data.filter(function(d){ 
+          return d.storeName.toLowerCase().indexOf(filter_name) > -1 
+          || d.storeType.toLowerCase().indexOf(filter_name) > -1
+          || d.storeAddress.toLowerCase().indexOf(filter_name) > -1
+          || d.storePlace.toLowerCase().indexOf(filter_name) > -1
+          || d.storeArea.toLowerCase().indexOf(filter_name) > -1
+          || d.storeNumber.toLowerCase().indexOf(filter_name) > -1
+        })
       :this.stores[2].data;
       // console.log("search");
+    },    
+    // 搜尋陣列中 stores[2].data.no(在store.js) 與從 getNo() 中取得的data.no相吻合的data.no
+    filterStore: function () {
+      let vm = this
+      return this.stores[2].data.filter(function (el){
+        return el.no? el.no===vm.stores_id: 0
+      })
     },
     pageStart: function(){
       return (this.currPage - 1) * this.countOfPage;
@@ -159,19 +175,20 @@ export default {
       return Math.ceil(this.filteredRows.length / this.countOfPage);
     }
   },
-  methods: {    
+  methods: {        
     setPage: function(idx){
       if( idx <= 0 || idx > this.totalPage ){
         return false;
       }
       this.currPage = idx;    
       return idx;
-    },
-    showInfo: function(id){
-      console.log('now id = %d', id)
-      this.stores_id = id,     
-      this.outclick_show = true,      
-      $(".store-info").css("transform","translate(-50%,-50%) scale(1)");      
+    },        
+    // 傳入data.no 給 stores_id，讓 filterStore 得以從陣列庫中搜尋提取相應資料
+    getNo: function(id){
+      let vm = this
+      this.stores_id = id
+      console.log('data.no=', this.stores_id)   
+      console.log('this.filterStore()=', vm.filterStore[0].storeName)   
     },  
     closeInfo: function(){
       this.outclick_show = false, 
@@ -179,8 +196,10 @@ export default {
     },
     reOrder: function() {    
       let vm = this
-      setTimeout(function(){ vm.grid.masonry('reloadItems'); }, 10); 
-      setTimeout(function(){ vm.grid.masonry('layout'); }, 10); 
+      setTimeout(function(){ vm.grid.masonry('reloadItems'); }, 50); 
+      setTimeout(function(){ vm.grid.masonry('layout'); }, 50); 
+      setTimeout(function(){ vm.grid.masonry('reloadItems'); }, 150); 
+      setTimeout(function(){ vm.grid.masonry('layout'); }, 150); 
       // console.log('reloading...')
     },
   },
@@ -199,9 +218,8 @@ export default {
     // started
     setTimeout(function(){ vm.grid.masonry('reloadItems'); }, 50); 
     setTimeout(function(){ vm.grid.masonry(); }, 50); 
-    // started
-    setTimeout(function(){ vm.grid.masonry('reloadItems'); }, 1000); 
-    setTimeout(function(){ vm.grid.masonry(); }, 1000); 
+    setTimeout(function(){ vm.grid.masonry('reloadItems'); }, 500); 
+    setTimeout(function(){ vm.grid.masonry(); }, 500); 
 
     // for searching 
     $( ".search" ).keydown(function(e) {  
@@ -215,253 +233,139 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+// .store-close {
+//   position: absolute;
+//   left: 50%;
+//   right: 50%;
+//   transform: translate(-50%, -50%);
+//   width: 100%;
+//   height: 100%;
+//   background-color: #ccc;
+// }
 
-.modal.fade .modal-dialog {
-  transform: translate(0, 0); 
-}
+// .store-outclick {
+//   position: fixed;
+//   width: 100%;
+//   height: 100%;
+//   background-color: rgba(244, 208, 111, 0.45);
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%);
+// }
 
-@media (max-width: 780px) {
-  .info-column .bottom-info {
-    flex-direction: column ;
-    height: 75vh;
-  }
-  .store-info .info-column .left {
-    order: 2;
-    width: 100% !important;
-  }
-  .store-info .info-column .right {
-    order: 1;
-    width: 100% !important;
-    position: initial !important;
-    overflow: initial !important;
-    height: 50vh !important;
-  }
-  .store-info .right .right-column {
-    width: 100%;
-    transform: translate(0);
-    position: relative;
-  }
-  .store-info .right .right-column iframe {
-    width: 100%;
-  }
-}
+// .store-info {
+//   width: 100%;
+//   position: fixed;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%) scale(0);
+//   transition: 0.2s;
+// }
 
+// .store-info .center-column {
+//   position: absolute;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -40%);
+//   width: 60%;
+// }
 
-.store-column {
-  display: block;
-}
+// .store-info .store-title {
+//   padding: 10px 0px;
+//   background-color: #F4D06F;
+//   position: relative;
+//   width: 100%;
+//   border-left: solid 1px #C32F27;
+//   border-right: solid 1px #C32F27;
+//   border-top: solid 1px #C32F27;
+// }
 
-.store-info {
-  display: block;
-}
+// .store-info .exit {
+//   display: inline-block;
+//   font-size: 0.5em;
+//   border: outset 2px #C32F27;
+//   padding: 2px 7px;
+//   position: absolute;
+//   right: 5px;
+//   top: 5px;
+//   border-radius: 0px;
+//   transition: 0.1s;
+// }
 
-* {
-  box-sizing: border-box;
-  font-family: 微軟正黑體;
-  vertical-align: top;
-  backface-visibility: hidden;
-}
+// .store-info .exit:hover {
+//   border: inset 2px #C32F27;
+//   transform: translate(2px, 2px);
+// }
 
-hr {
-  border-color: #D8572A;
-  margin: 5px 0;
-}
+// .store-info .color-lighten {
+//   background-color: #e6e6e6;
+// }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  background-color: #eee;
-}
+// .store-info .info-column {
+//   max-width: 620px;
+//   margin: 0 auto;
+//   height: 60vh;
+//   overflow: auto;
+//   border-radius: 0px 0px 10px 10px;
+// }
+// .bottom-info {
+//   display: flex;
+// }
 
-.center-column {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
+// .store-info .info-column::-webkit-scrollbar {
+//   width: 14px;
+//   border-radius: 10px;
+//   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+//   background-color: #CCCCCC;
+// }
 
-.search {
-  margin: 10px auto;
-}
+// .store-info .info-column::-webkit-scrollbar-thumb {
+//   border-radius: 10px;
+//   background-color: #5f0111;
+//   background-image: -webkit-linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4) 50%, transparent, transparent);
+//   border-radius: 10px;
+//   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+// }
 
-.store-column {
-  width: 90%;
-  margin: 0 auto;
-}
+// .store-info .info-column .left {
+//   width: 220px;
+//   background-color: #DB7C26;
+// }
 
-.inner-column {
-  margin: 0 auto;
-}
+// .store-info .info-column .left-column {
+//   background-color: #DB7C26;
+// }
 
-.inner-column:after {
-  content: '';
-  display: block;
-  clear: both;
-}
+// .store-info .info-column .right {
+//   width: 440px;
+//   height: auto;
+//   right: 12px;
+// }
 
-.store {
-  /* transition: background-color 0.5s, transform 0.1s; */
-  display: inline-block;
-  float: left;
-  width: 200px;
-  min-width: 200px;
-  margin: 0.5rem;
-  cursor: pointer;
-  border: outset 2px #DB7C26;
-  background-color: #fff;
-  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
-}
+// .store-info .info-column .right-column {
+//   width: 100%;
+//   height: 100%;
+// }
 
-.store:hover {
-  background-color: beige;  
-}
+// .store-info .info-column .right-column iframe {
+//   border: inset 5px #C32F27;
+//   width: 100%;
+//   height: 100%;
+//   background-color: #f0f8ff;
+// }
 
-.store:active {
-  transform: translate(5px, 5px);
-  border: inset 2px #DB7C26;
-}
+// .store-info .info-column .store-img {
+//   width: 100%;
+//   padding: 0;
+// }
 
-.store .box {
-  padding: 2%;
-}
+// .store-info .info-column .bottom-column {
+//   display: flex;
+//   flex-direction: column;
+// }
 
-.store .image {
-  width: 100%;
-}
-
-.store-close {
-  position: absolute;
-  left: 50%;
-  right: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  background-color: #ccc;
-}
-
-.store-outclick {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(244, 208, 111, 0.45);
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.store-info {
-  width: 100%;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  transition: 0.2s;
-}
-
-.store-info .center-column {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -40%);
-  width: 60%;
-}
-
-.store-info .store-title {
-  padding: 10px 0px;
-  background-color: #F4D06F;
-  position: relative;
-  width: 100%;
-  border-left: solid 1px #C32F27;
-  border-right: solid 1px #C32F27;
-  border-top: solid 1px #C32F27;
-}
-
-.store-info .exit {
-  display: inline-block;
-  font-size: 0.5em;
-  border: outset 2px #C32F27;
-  padding: 2px 7px;
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  border-radius: 0px;
-  transition: 0.1s;
-}
-
-.store-info .exit:hover {
-  border: inset 2px #C32F27;
-  transform: translate(2px, 2px);
-}
-
-.store-info .color-lighten {
-  background-color: #e6e6e6;
-}
-
-.store-info .info-column {
-  max-width: 620px;
-  margin: 0 auto;
-  height: 60vh;
-  overflow: auto;
-  border-radius: 0px 0px 10px 10px;
-}
-.bottom-info {
-  display: flex;
-}
-
-.store-info .info-column::-webkit-scrollbar {
-  width: 14px;
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
-  background-color: #CCCCCC;
-}
-
-.store-info .info-column::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: #5f0111;
-  background-image: -webkit-linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4) 50%, transparent, transparent);
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
-}
-
-.store-info .info-column .left {
-  width: 220px;
-  background-color: #DB7C26;
-}
-
-.store-info .info-column .left-column {
-  background-color: #DB7C26;
-}
-
-.store-info .info-column .right {
-  width: 440px;
-  height: auto;
-  right: 12px;
-}
-
-.store-info .info-column .right-column {
-  width: 100%;
-  height: 100%;
-}
-
-.store-info .info-column .right-column iframe {
-  border: inset 5px #C32F27;
-  width: 100%;
-  height: 100%;
-  background-color: #f0f8ff;
-}
-
-.store-info .info-column .store-img {
-  width: 100%;
-  padding: 0;
-}
-
-.store-info .info-column .bottom-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.store-info .info-column .store-data {
-  padding: 5px;
-  border: solid 1px #780116;
-}
+// .store-info .info-column .store-data {
+//   padding: 5px;
+//   border: solid 1px #780116;
+// }
 </style>
