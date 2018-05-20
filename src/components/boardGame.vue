@@ -43,7 +43,7 @@
           <div class="box" data-toggle="modal" data-target="#store-info" @click="getNo(data.no)">
             <div class="title">{{data.storeName}}</div>
             <hr/>
-            <img class="img-fluid w-100" :src="'./static/image/' + data.storePhoto " alt=""></img>
+            <img class="img-fluid w-100" :src="'../static/image/' + data.storePhoto " alt=""></img>
             <div class="address">地址：{{data.storeAddress}}</div>
             <hr/>
             <div class="info">類型：{{data.storeType}}</div>
@@ -63,7 +63,7 @@
           <div class="modal-body">
             <div class="row">
               <div class="col-md-5">
-                <img :src="'./static/image/'+filterStore[0].storePhoto " alt="" class="img-fluid w-100">
+                <img :src="'../static/image/'+filterStore[0].storePhoto " alt="" class="img-fluid w-100">
                 <div class="my-1">
                   類型：{{filterStore[0].storeType}}
                   <br>地址：{{filterStore[0].storeAddress}}
@@ -83,48 +83,7 @@
         </div>
       </div>
     </div>
-    <!-- <div class="store-outclick" v-if="outclick_show" @click="closeInfo"></div>
-    <div class="store-info">
-      <div class="center-column">        
-        <div class="info-column">
-          <div class="store-title">
-            <h1>{{stores[2].data[stores_id].storeName}}</h1>
-            <strong class="exit" @click="closeInfo">X</strong>
-          </div>
-          <div class="bottom-info">
-            <div class="left">
-              <div class="left-column">
-                <img :src="'./static/image/' + stores[2].data[stores_id].storePhoto" alt="" class="store-data store-img">
-                <div class="bottom-column">
-                  <div class="store-data store-type">類型: {{stores[2].data[stores_id].storeType}}</div>
-                  <div class="store-data store-address">地址:
-                    <br/>
-                    <span>{{stores[2].data[stores_id].storeAddress}}</span>
-                  </div>
-                  <div class="store-data store-phone">電話: {{stores[2].data[stores_id].storeNumber}}</div>
-                  <div class="store-data store-time">營業時間:
-                    <br/>
-                    <span v-html="stores[2].data[stores_id].storeTime"></span>
-                  </div>
-                  <div class="store-data store-spend">消費模式:
-                    <br/>
-                    <span v-html="stores[2].data[stores_id].storeSpend"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="right">
-              <div class="right-column">
-                <iframe v-if="outclick_show" v-bind:src="stores[2].data[stores_id].googleURL" frameborder="0" allowfullscreen=""></iframe>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-    </div> -->
-  </div>
-  
+  </div>  
 </template>
 
 <script>
@@ -233,139 +192,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-// .store-close {
-//   position: absolute;
-//   left: 50%;
-//   right: 50%;
-//   transform: translate(-50%, -50%);
-//   width: 100%;
-//   height: 100%;
-//   background-color: #ccc;
-// }
-
-// .store-outclick {
-//   position: fixed;
-//   width: 100%;
-//   height: 100%;
-//   background-color: rgba(244, 208, 111, 0.45);
-//   left: 50%;
-//   top: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .store-info {
-//   width: 100%;
-//   position: fixed;
-//   left: 50%;
-//   top: 50%;
-//   transform: translate(-50%, -50%) scale(0);
-//   transition: 0.2s;
-// }
-
-// .store-info .center-column {
-//   position: absolute;
-//   left: 50%;
-//   top: 50%;
-//   transform: translate(-50%, -40%);
-//   width: 60%;
-// }
-
-// .store-info .store-title {
-//   padding: 10px 0px;
-//   background-color: #F4D06F;
-//   position: relative;
-//   width: 100%;
-//   border-left: solid 1px #C32F27;
-//   border-right: solid 1px #C32F27;
-//   border-top: solid 1px #C32F27;
-// }
-
-// .store-info .exit {
-//   display: inline-block;
-//   font-size: 0.5em;
-//   border: outset 2px #C32F27;
-//   padding: 2px 7px;
-//   position: absolute;
-//   right: 5px;
-//   top: 5px;
-//   border-radius: 0px;
-//   transition: 0.1s;
-// }
-
-// .store-info .exit:hover {
-//   border: inset 2px #C32F27;
-//   transform: translate(2px, 2px);
-// }
-
-// .store-info .color-lighten {
-//   background-color: #e6e6e6;
-// }
-
-// .store-info .info-column {
-//   max-width: 620px;
-//   margin: 0 auto;
-//   height: 60vh;
-//   overflow: auto;
-//   border-radius: 0px 0px 10px 10px;
-// }
-// .bottom-info {
-//   display: flex;
-// }
-
-// .store-info .info-column::-webkit-scrollbar {
-//   width: 14px;
-//   border-radius: 10px;
-//   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
-//   background-color: #CCCCCC;
-// }
-
-// .store-info .info-column::-webkit-scrollbar-thumb {
-//   border-radius: 10px;
-//   background-color: #5f0111;
-//   background-image: -webkit-linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4) 50%, transparent, transparent);
-//   border-radius: 10px;
-//   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
-// }
-
-// .store-info .info-column .left {
-//   width: 220px;
-//   background-color: #DB7C26;
-// }
-
-// .store-info .info-column .left-column {
-//   background-color: #DB7C26;
-// }
-
-// .store-info .info-column .right {
-//   width: 440px;
-//   height: auto;
-//   right: 12px;
-// }
-
-// .store-info .info-column .right-column {
-//   width: 100%;
-//   height: 100%;
-// }
-
-// .store-info .info-column .right-column iframe {
-//   border: inset 5px #C32F27;
-//   width: 100%;
-//   height: 100%;
-//   background-color: #f0f8ff;
-// }
-
-// .store-info .info-column .store-img {
-//   width: 100%;
-//   padding: 0;
-// }
-
-// .store-info .info-column .bottom-column {
-//   display: flex;
-//   flex-direction: column;
-// }
-
-// .store-info .info-column .store-data {
-//   padding: 5px;
-//   border: solid 1px #780116;
-// }
 </style>

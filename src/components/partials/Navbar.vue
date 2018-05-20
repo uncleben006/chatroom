@@ -26,12 +26,14 @@ export default {
   },
   mounted() {
     var vm = this;
-    // 偵測 url pathname，refresh 才不會吃到原本的 class
-    var pathname = $(location).attr('pathname');
-    if(pathname == '/'){
+    // 偵測 store 跟 chatroom id 是否存在
+    // console.log($('#store')[0])
+    // console.log($('#chatroom')[0])
+
+    if($('#chatroom')[0] != undefined){
       $('[data-url="/"]').toggleClass('active')
     }
-    else if(pathname == '/board-game'){
+    else if($('#store')[0] != undefined){
       $('[data-url="/board-game"]').toggleClass('active')
     }
     // 這樣換按鍵才能更換 navbar class

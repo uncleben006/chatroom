@@ -1,5 +1,5 @@
 <template>
-  <div class="chatroom mt-3">
+  <div id="chatroom" class="chatroom mt-3">
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-6 mx-auto chatroom-height">
