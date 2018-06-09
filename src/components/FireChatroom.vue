@@ -2,7 +2,7 @@
   <div id="chatroom" class="chatroom mt-3">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-lg-6 mx-auto chatroom-height">
+        <div class="col-lg-4 mx-auto chatroom-height">
           <div class="card" style="height: 100%;">
             <div id="message-list" class="card-body" style="height: 0%; overflow: auto;">    
               <ul class="list-unstyled row flex-column-reverse">
@@ -28,12 +28,12 @@
                   <input type="text" class="form-control" v-model="tempUsername" id="username" placeholder="輸入姓名">
                   <small class="form-text text-muted">請輸入個人姓名開始使用聊天室</small>                  
                 </div>
-                <button type="button" data-toggle="collapse" data-target="#name" class="btn btn-warning" @click="updateUsername()">送出</button>
+                <button type="button" class="btn btn-warning" @click="updateUsername()">送出</button>
               </div>
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="輸入對話內容" @keyup.enter="submitMessage" v-model="tempMessage" :disabled="!username.length">
+                <input type="text" class="form-control rounded-0" placeholder="輸入對話內容" @keyup.enter="submitMessage" v-model="tempMessage" :disabled="!username.length">
                 <span class="input-group-btn">
-                  <button class="btn btn-warning" type="button" :disabled="!username.length" @click="submitMessage()">送出</button>
+                  <button class="btn btn-warning rounded-0" type="button" :disabled="!username.length" @click="submitMessage()">送出</button>
                 </span>
               </div>
             </div>                    
@@ -56,18 +56,21 @@ export default {
       tempMessage: '',
       username: '',
       messagesLength: '',
-      messages: []
+      messages: [],
     }
   },
   methods: {
     updateUsername () {
-      let vm = this;
-      vm.username = vm.tempUsername;
-      console.log(vm.username, vm.tempUsername)
+      let vm = this
+      vm.username = vm.tempUsername
+      if(vm.username == ''){return}
+      $('#name').collapse('toggle')
+      // console.log(vm.username)
     },
     submitMessage () {
-      let vm = this;
-      let timestamp = Math.floor(Date.now() / 1000);
+      let vm = this
+      let timestamp = Math.floor(Date.now() / 1000)
+      if(vm.tempMessage == ''){return}
 
       // update data to firebase
       chatroomRef.child(timestamp).set({
@@ -85,8 +88,8 @@ export default {
     },
     // count object number
     ObjectLength( object ) {
-      var length = 0;
-      for( var key in object ) {
+      let length = 0;
+      for( let key in object ) {
         if( object.hasOwnProperty(key) ) {
           ++length;
         }
@@ -94,7 +97,7 @@ export default {
       return length;
     },
     scrollToBottom(){
-      var ml = document.getElementById("message-list");
+      let ml = document.getElementById("message-list");
       // scrollHeight = scroll的全高
       // clientHeight = css所給的高
       // // scrollTop = 從上滑到底的，最上為0
@@ -108,7 +111,7 @@ export default {
     // setTimeout(() => { vm.scrollToBottom() }, 1000)
     let messages = []    
     // get window width
-    var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth    
+    let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth    
     chatroomRef.on('value', function(snapshot) {
       // 如果window大於992px，那陣列需要由上往下排
       if(x>992){
@@ -125,7 +128,7 @@ export default {
     });     
     $('.arrow-down i').on('click',function () {
       vm.scrollToBottom()
-    })
+    });
   }
 }
 </script>
