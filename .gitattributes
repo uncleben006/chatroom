@@ -1,1 +1,1 @@
-test/**/*.js linguist-language=Vue
+*.rb linguist-language=Vue.js
